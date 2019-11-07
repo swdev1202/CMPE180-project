@@ -74,6 +74,44 @@ class SudokuBoard{
             return result;
         }
 
+        bool validateBoard_dumbest() {
+            vector<int> rowSums = {0,0,0,0,0,0,0,0,0};
+            vector<int> columnSums = {0,0,0,0,0,0,0,0,0};
+            vector<int> squareSums = {0,0,0,0,0,0,0,0,0};
+
+            int squareJumper = 0;
+
+            for(int i=0; i<9; i++){
+                for(int j=0; j<9; j++){
+                    rowSums[i] += board[i][j];
+                }
+            }
+
+            for(int i=0; i<9; i++){
+                for(int j=0; j<9; j++){
+                    columnSums[j] += board[i][j];
+                }
+            }
+
+
+            for(int i=0; i<9; i++){
+                if(i == 3 || i == 6){
+                    squareJumper += 3;
+                }
+                for(int j=0; j<9; j++){
+                    squareSums[squareJumper + j/3] += board[i][j];
+                }
+            }
+
+            bool result = true;
+            for(int i=0; i<9; i++){
+                if(rowSums[i] != 45 || columnSums[i] != 45 || squareSums[i] !=45) result = false;
+            }
+
+            return result;
+
+        }
+
         void printBoard(){
             for(int i=0; i<9; i++){
                 for(int j=0; j<9; j++){
@@ -126,14 +164,13 @@ int main(){
 
 
     bool result = true;
-    auto start = chrono::high_resolution_clock::now();
-    for (SudokuBoard board : gameBoards){
-        result &= board.validateBoard_dumb();
+    
+    for(int i=0; i<gameBoards.size(); i++){
+        auto start = chrono::high_resolution_clock::now();
+        result = gameBoards[i].validateBoard();
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
+        cout << (i+1) << "th result = " << result << ", with time(us): " << duration.count() << endl;
     }
-    auto stop = chrono::high_resolution_clock::now();
-
-    auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
-
-    cout << result << ", with time(us): " << duration.count() << endl;
     return 0;
 }
