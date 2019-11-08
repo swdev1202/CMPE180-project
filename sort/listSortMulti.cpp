@@ -94,8 +94,6 @@ void printList(const vector<int>& list){
 }
 
 int main(){
-    // vector<int> test1 = {7, 12, 19, 3, 18, 4, 2, 6, 15, 8, -2, -11, 32, 27, 23, 31, 77};
-
     // normal
     vector<vector<int>> test = createTestSet(5, 10, 20, -10);
     // extreme
