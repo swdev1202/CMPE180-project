@@ -93,11 +93,12 @@ void printList(const vector<int>& list){
     }
 }
 
-int main(){
-    // normal
-    vector<vector<int>> test = createTestSet(5, 10, 20, -10);
-    // extreme
-    //vector<vector<int>> test = createTestSet(1, 10000, 2000, -1000);
+int main(int argc, char** argv){
+    int NORMAL = (int)*argv[1] - '0';
+    
+    vector<vector<int>> test;
+    if(NORMAL) test = createTestSet(5, 10, 20, -10);
+    else test = createTestSet(1, 10000, 2000, -1000);
 
     int i=1;
     for(auto& t : test){

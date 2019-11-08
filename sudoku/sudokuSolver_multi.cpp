@@ -14,7 +14,16 @@ class SudokuBoard{
 
         SudokuBoard(vector<vector<int>> data) {
             board = data;
-        }   
+        }
+
+        void printBoard(){
+            for(int i=0; i<9; i++){
+                for(int j=0; j<9; j++){
+                    cout << board[i][j] << " ";
+                }
+                cout << endl;
+            }
+        } 
 };
 
 void rowChecker(const SudokuBoard& game_board, bool& result){
@@ -107,15 +116,21 @@ void loadGameBoards(string filepath, vector<SudokuBoard>& board){
     }
 }
 
-int main(){
+int main(int argc, char** argv){
+    int NORMAL = (int)*argv[1] - '0';
+    string filename;
+    if(NORMAL) filename = "sudoku_board_single.txt";
+    else filename = "sudoku_boards.txt";
+
     // prepare game boards
     vector<SudokuBoard> gameBoards;
 
     // load data onto gameboards
-    string fileLocation = "sudoku_boards.txt";
-    loadGameBoards(fileLocation, gameBoards);
+    loadGameBoards(filename, gameBoards);
 
     for(int i=0; i<gameBoards.size(); i++){
+        if(NORMAL) gameBoards[i].printBoard();
+
         auto start = chrono::high_resolution_clock::now();
         bool final_result = true;
         bool row_result;

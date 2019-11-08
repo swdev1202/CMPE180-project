@@ -122,7 +122,12 @@ class SudokuBoard{
         }
 };
 
-int main(){
+int main(int argc, char** argv){
+    int NORMAL = (int)*argv[1] - '0';
+    string filename;
+    if(NORMAL) filename = "sudoku_board_single.txt";
+    else filename = "sudoku_boards.txt";
+
     // prepare game boards
     vector<SudokuBoard> gameBoards;
 
@@ -132,7 +137,7 @@ int main(){
     int numBoards = 0;
     int boardReadingCnt = 1;
     string line = "";
-    ifstream infile("sudoku_boards.txt");
+    ifstream infile(filename);
     if(infile.is_open()){
         while(getline(infile,line)){
             if(line.size() < 9){
@@ -166,6 +171,7 @@ int main(){
     bool result = true;
     
     for(int i=0; i<gameBoards.size(); i++){
+        if(NORMAL) gameBoards[i].printBoard();
         auto start = chrono::high_resolution_clock::now();
         result = gameBoards[i].validateBoard();
         auto stop = chrono::high_resolution_clock::now();

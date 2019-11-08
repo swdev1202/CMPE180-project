@@ -41,9 +41,9 @@ void print2Dvector(vector<vector<int>>& in){
     }
 }
 
-int main(){
+int main(int argc, char** argv){
     srand (time(NULL));
-    bool NORMAL = 1;
+    int NORMAL = (int)*argv[1] - '0';
     int HEIGHT, WIDTH;
 
     if(NORMAL) HEIGHT = 20, WIDTH = 20;
