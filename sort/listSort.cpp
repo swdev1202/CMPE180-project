@@ -1,5 +1,8 @@
 #include <vector>
 #include <iostream>
+#include <chrono>
+#include <stdlib.h>    
+#include <time.h>     
 
 using namespace std;
 
@@ -25,13 +28,45 @@ void sortList(vector<int>& a){
     
 }
 
+vector<vector<int>> createTestSet(int numTest, int listSize, int range, int shift){
+    vector<vector<int>> testset(numTest, vector<int>{});
+    srand (time(NULL));
+
+    for(int i=0; i<numTest; i++){
+        for(int j=0; j<listSize; j++){
+            testset[i].push_back(rand() % range + (shift));
+        }
+    }
+
+    return testset;
+}
+
+void printList(const vector<int>& list){
+    for(int i=0; i<list.size(); i++){
+        if(i != list.size()-1) cout << list[i] << ", ";
+        else cout << list[i] << endl;
+    }
+}
+
 int main(){
-    vector<int> test1 = {7, 12, 19, 3, 18, 4, 2, 6, 15, 8};
+    // normal
+    vector<vector<int>> test = createTestSet(5, 10, 20, -10);
+    // extreme
+    // vector<vector<int>> test = createTestSet(1, 10000, 2000, -1000);
 
-    sortList(test1);
-
-    for(auto& a : test1){
-        cout << a << endl;
+    int i=1;
+    for(auto& t : test){
+        cout << "test #" << i << " (before sort) = ";
+        printList(t);
+        auto start = chrono::high_resolution_clock::now();
+        sortList(t);
+        auto stop = chrono::high_resolution_clock::now();
+        cout << "test #" << i << " (after sort) = ";
+        printList(t);
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
+        cout << "test #" << i << " finished, with time(us): " << duration.count() << endl;
+        cout << endl;
+        i++;
     }
 
     return 0;

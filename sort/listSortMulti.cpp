@@ -73,59 +73,73 @@ void mergeList(const vector<int>& a, const vector<int>& b, vector<int>& sorted){
     }
 }
 
+vector<vector<int>> createTestSet(int numTest, int listSize, int range, int shift){
+    vector<vector<int>> testset(numTest, vector<int>{});
+    srand (time(NULL));
+
+    for(int i=0; i<numTest; i++){
+        for(int j=0; j<listSize; j++){
+            testset[i].push_back(rand() % range + (shift));
+        }
+    }
+
+    return testset;
+}
+
+void printList(const vector<int>& list){
+    for(int i=0; i<list.size(); i++){
+        if(i != list.size()-1) cout << list[i] << ", ";
+        else cout << list[i] << endl;
+    }
+}
+
 int main(){
-    vector<int> test1 = {7, 12, 19, 3, 18, 4, 2, 6, 15, 8, -2, -11, 32, 27, 23, 31, 77};
+    // vector<int> test1 = {7, 12, 19, 3, 18, 4, 2, 6, 15, 8, -2, -11, 32, 27, 23, 31, 77};
 
-    int mid_point = test1.size()/2;
-    int first_list_size = 0;
-    int second_list_size = 0;
+    // normal
+    vector<vector<int>> test = createTestSet(5, 10, 20, -10);
+    // extreme
+    // vector<vector<int>> test = createTestSet(1, 10000, 2000, -1000);
 
-    if(test1.size()%2 == 0){
-        first_list_size = test1.size()/2;
-        second_list_size = first_list_size;
+    int i=1;
+    for(auto& t : test){
+        cout << "test #" << i << " (before sort) = ";
+        printList(t);
+
+        int mid_point = t.size()/2;
+        int first_list_size = 0;
+        int second_list_size = 0;
+
+        if(t.size()%2 == 0){
+            first_list_size = t.size()/2;
+            second_list_size = first_list_size;
+        }
+        else{
+            first_list_size = t.size()/2;
+            second_list_size = first_list_size+1;
+        }
+
+        vector<int> left_list;
+        vector<int> right_list;
+
+        auto start = chrono::high_resolution_clock::now();
+        thread left (sortList, t, 0, mid_point, ref(left_list));
+        thread right (sortList, t, mid_point, t.size(), ref(right_list));
+
+        left.join();
+        right.join();
+
+        vector<int> sorted_list;
+        thread merge (mergeList, left_list, right_list, ref(sorted_list));
+        merge.join();
+        auto stop = chrono::high_resolution_clock::now();
+
+        cout << "test #" << i << " (after sort) = ";
+        printList(sorted_list);
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
+        cout << "test #" << i << " finished, with time(us): " << duration.count() << endl;
+        cout << endl;
+        i++;
     }
-    else{
-        first_list_size = test1.size()/2;
-        second_list_size = first_list_size+1;
-    }
-
-    vector<int> left_list;
-    vector<int> right_list;
-
-    thread left (sortList, test1, 0, mid_point, ref(left_list));
-    thread right (sortList, test1, mid_point, test1.size(), ref(right_list));
-
-    left.join();
-    right.join();
-
-    vector<int> sorted_list;
-    thread merge (mergeList, left_list, right_list, ref(sorted_list));
-    merge.join();
-
-
-    cout << "Unsorted List" << endl;
-    for(auto& a : test1){
-        cout << a << ",";
-    }
-    cout << endl;
-
-    cout << "Left List" << endl;
-    for(auto& a: left_list){
-        cout << a << ",";
-    }
-    cout << endl;
-
-    cout << "Right List" << endl;
-    for(auto& a : right_list){
-        cout << a << ",";
-    }
-    cout << endl;
-    
-    cout << "Final Sorted List" << endl;
-    for(auto& a: sorted_list){
-        cout << a <<",";
-    }
-    cout << endl;
-
     return 0;
 }
