@@ -77,8 +77,9 @@ int main(int argc, char** argv){
     bot.join();
 
     vector<vector<int>> result = out1;
-    result.insert(result.end(), out2.begin(), out2.end());
     auto stop = chrono::high_resolution_clock::now();
+    result.insert(result.end(), out2.begin(), out2.end());
+    
     auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
 
     cout << "Test Image Size = (" << image1.size() << "," << image1[0].size() << ")" << endl;
