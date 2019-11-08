@@ -162,7 +162,7 @@ int main(){
         auto stop = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
 
-        std::cout << (i+1) << "th result =" << final_result << ", with time(us): " << duration.count() << std::endl;
+        std::cout << (i+1) << "th result = " << final_result << ", with time(us): " << duration.count() << std::endl;
     } 
     return 0;
 }

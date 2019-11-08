@@ -47,13 +47,12 @@ void print2Dvector(vector<vector<int>>& in){
 
 int main(){
     srand (time(NULL));
+    bool NORMAL = 1;
+    
+    int HEIGHT, WIDTH;
 
-    // normal
-    // int HEIGHT = 50;
-    // int WIDTH = 50;
-    // extreme
-    int HEIGHT = 2160;
-    int WIDTH = 3840;
+    if(NORMAL) HEIGHT = 20, WIDTH = 20;
+    else HEIGHT = 2160, WIDTH = 3840;
 
     vector<vector<int>> image1(HEIGHT, vector<int>(WIDTH, 0));
     for(int i=0; i<image1.size(); i++){
@@ -69,11 +68,11 @@ int main(){
     auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
 
     cout << "Test Image Size = (" << image1.size() << "," << image1[0].size() << ")" << endl;
-    // print2Dvector(image1);
+    if(NORMAL) print2Dvector(image1);
     cout << "Filter Size = (" << filter.size() << "," << filter[0].size() << ")" <<  endl;
-    // print2Dvector(filter);
+    if(NORMAL) print2Dvector(filter);
     cout << "Convoluted Size = (" << result.size() << "," << result[0].size() << ")" << endl;
-    // print2Dvector(result);
+    if(NORMAL) print2Dvector(result);
     cout << "finished, with time(us): " << duration.count() << endl;
 
     return 0;
